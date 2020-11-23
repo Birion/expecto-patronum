@@ -1,3 +1,6 @@
+use expecto_patronum::magic::Caster;
+
 fn main() {
-    println!("Hello, world!");
+    let caster = Caster::new();
+    caster.cast()
 }
