@@ -138,14 +138,41 @@ pub mod magic {
     use std::hash::{Hash, Hasher};
     use std::{env, process};
 
+    #[cfg(test)]
+    mod tests {
+        use super::*;
+
+        #[test]
+        fn test_hash_name() {
+            assert_eq!(hash_name("bob"), 15304630271063698513);
+        }
+
+        #[test]
+        fn test_new_caster() {
+            assert_eq!(
+                Caster::new("Bob".to_string()),
+                Caster {
+                    hash: 11186256565988464916
+                }
+            );
+        }
+
+        #[test]
+        fn test_get_animal() {
+            let caster = Caster::new("Alice".to_string());
+            let animal = "komodo dragon";
+            assert_eq!(caster.get_animal(), animal);
+        }
+    }
+
+    #[derive(PartialOrd, PartialEq, Debug)]
     pub struct Caster {
         hash: u64,
     }
 
     impl Caster {
-        pub fn new() -> Self {
-            let name = get_name();
-            let hash = hash_username(&name);
+        pub fn new(name: String) -> Self {
+            let hash = hash_name(&name);
             Caster { hash }
         }
 
@@ -164,7 +191,7 @@ pub mod magic {
         }
     }
 
-    fn get_name() -> String {
+    pub fn get_name() -> String {
         match env::var("USERNAME") {
             Ok(user) => user,
             Err(_) => {
@@ -174,7 +201,7 @@ pub mod magic {
         }
     }
 
-    fn hash_username(user: &str) -> u64 {
+    fn hash_name(user: &str) -> u64 {
         let mut hasher = DefaultHasher::new();
         user.hash(&mut hasher);
         hasher.finish()
