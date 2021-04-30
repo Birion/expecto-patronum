@@ -1,6 +1,6 @@
-use expecto_patronum::magic::Caster;
+use expecto_patronum::{get_name, Caster};
 
 fn main() {
-    let caster = Caster::new();
+    let caster: Caster = get_name().into();
     caster.cast()
 }
